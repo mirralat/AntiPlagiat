@@ -1,13 +1,26 @@
-class AntiPlagiat:
-    def __init__(self, file_one, file_two):
-        self.file_one = file_one
-        self.file_two = file_two
+import hashlib
+import re
 
-    def calc_jaccard_similarity(self):
-        set_one = set(self.file_one)
-        set_two = set(self.file_two)
+from Levenshtein import distance as lev
+
+
+class AntiPlagiat:
+    def __init__(self):
+        pass
+
+    def find_jaccard_similarity(self, file_one, file_two):
+        set_one = set(file_one)
+        set_two = set(file_two)
 
         intersection = len(set_one.intersection(set_two))
         union = len(set_one.union(set_one))
 
         return intersection / union
+
+    def find_levenshtein(self, file_one, file_two):
+        return lev(file_one, file_two)
+
+    def find_hash(self, file_one, file_two):
+        if hashlib.sha512(file_one) == hashlib.sha512(file_two):
+            return True
+        return False
