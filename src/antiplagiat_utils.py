@@ -1,8 +1,4 @@
 import hashlib
-import re
-
-import Levenshtein
-from Levenshtein import distance as lev
 from rapidfuzz import fuzz
 
 
@@ -23,6 +19,7 @@ class AntiPlagiat:
         return fuzz.partial_ratio(file_one, file_two)
 
     def find_hash(self, file_one, file_two):
-        if hashlib.sha512(file_one) == hashlib.sha512(file_two):
+        if hashlib.sha512(file_one.encode('utf-8')).hexdigest() == hashlib.sha512(file_two.encode('utf-8')).hexdigest():
             return True
         return False
+

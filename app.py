@@ -1,8 +1,8 @@
-from comparator import get_significant_subtrees, compare_subtrees
-import ast
 import os
 
-reorder_depth = 10000
+from src.antiplagiat_calc import check_plagiat
+
+
 def compare_directory(directory, target_file):
     files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f)) and f.endswith('.py')]
     if len(files) == 0:
@@ -11,20 +11,16 @@ def compare_directory(directory, target_file):
 
     results = []
     with open(directory + target_file, "r") as source:
-        target_tree = ast.parse(source.read(), mode="exec")
+        code_one = source.read()
 
-    target_subtree_list = get_significant_subtrees(target_tree)
     for file in files:
         if file == target_file:
             continue
 
-        file_path = os.path.join(directory, file)
         with open(directory + file, "r") as source:
-            tree = ast.parse(source.read(), mode="exec")
+            code_two = source.read()
 
-        subtree_list = get_significant_subtrees(tree)
-
-        similarity = compare_subtrees(subtree_list, target_subtree_list, reorder_depth)[0]
+        similarity = check_plagiat(code_one, code_two)
         results.append((file, similarity))
 
     results.sort(key=lambda x: x[1], reverse=True)
