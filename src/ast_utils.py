@@ -81,7 +81,6 @@ class ASTUtils:
             for child_a in children_a:
                 best_match += [child_a]
                 for child_b in children_b:
-                    print('add')
                     best_match_value += self.compare_ASTs(child_a, child_b, reorder_depth)
                     best_match += [child_b]
         else:
