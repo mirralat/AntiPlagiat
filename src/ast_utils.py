@@ -178,31 +178,10 @@ class ASTUtils:
                     + self.apply_weights_to_subtrees(weight, ast_2)
             ) / 2
 
-    def _compare_many(self, programs: list) -> list:
-
-        tree_list = list(
-            map(lambda prog: self.get_significant_subtrees(ast.parse(prog)), programs)
-        )
-
-        matrix = []
-        for program_1_tree_num in range(0, len(tree_list)):
-            for program_2_tree_num in range(program_1_tree_num, len(tree_list)):
-                if program_1_tree_num == program_2_tree_num:
-                    continue
-                print(f"comparing {program_1_tree_num} to {program_2_tree_num}")
-
-                subtrees1 = tree_list[program_1_tree_num]
-                subtrees2 = tree_list[program_2_tree_num]
-
-                result = self.compare_subtrees(subtrees1, subtrees2, 1000)[0]
-
-                matrix.append((program_1_tree_num, program_2_tree_num, result))
-                matrix.append((program_2_tree_num, program_1_tree_num, result))
-
-        return matrix
-
     def run_ast(self, code_one, code_two) -> float:
-        subtree_list1 = self.get_significant_subtrees(code_one)
-        subtree_list2 = self.get_significant_subtrees(code_two)
+        target_tree = ast.parse(code_one, mode="exec")
+        tree = ast.parse(code_two, mode="exec")
+        subtree_list1 = self.get_significant_subtrees(target_tree)
+        subtree_list2 = self.get_significant_subtrees(tree)
         similarity = self.compare_subtrees(subtree_list1, subtree_list2, 10000)
         return similarity[0]
