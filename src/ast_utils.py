@@ -184,4 +184,4 @@ class ASTUtils:
         subtree_list1 = self.get_significant_subtrees(target_tree)
         subtree_list2 = self.get_significant_subtrees(tree)
         similarity = self.compare_subtrees(subtree_list1, subtree_list2, 10000)
-        return similarity[0]
+        return similarity[0]*100
