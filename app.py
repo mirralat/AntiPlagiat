@@ -3,7 +3,7 @@ import os
 from src.antiplagiat_calc import check_plagiat
 
 
-def compare_directory(directory, target_file):
+def compare_directory(directory, target_file, state = None):
     files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f)) and f.endswith('.py')]
     if len(files) == 0:
         print("Directory is empty!")
@@ -20,7 +20,10 @@ def compare_directory(directory, target_file):
         with open(directory + file, "r") as source:
             code_two = source.read()
 
-        similarity = check_plagiat(code_one, code_two)
+        if state:
+            similarity = check_plagiat(code_one, code_two, state)
+        else:
+            similarity = check_plagiat(code_one, code_two)
         results.append((file, similarity))
 
     results.sort(key=lambda x: x[1], reverse=True)
@@ -28,6 +31,8 @@ def compare_directory(directory, target_file):
 
 
 if __name__ == "__main__":
+    metric_states = {'1': 'jaccard', '2': 'levenshtein', '3': 'ast'}
+
     directory = input("Enter directory with files: ")
     if not directory.endswith('/'):
         directory += '/'
@@ -41,6 +46,12 @@ if __name__ == "__main__":
     if not os.path.isfile(directory + target_file):
         raise ValueError(f"Unable to find file: '{target_file}'.")
 
-    similarity_list = compare_directory(directory, target_file)
+    target_state = input("Enter metric number (1 - jaccard, 2 - levenshtein, 3 - ast) or "
+                         "everything to calculate common: ")
+
+    if not metric_states.get(target_state):
+        similarity_list = compare_directory(directory, target_file)
+    else:
+        similarity_list = compare_directory(directory, target_file, metric_states[target_state])
     for result in similarity_list:
         print(f'ID: {result[0]}, Similarity: {result[1]}')

@@ -34,20 +34,26 @@ class AntiPlagiatCalc:
         return False
 
 
-def check_plagiat(code_one, code_two) -> float:
+def check_plagiat(code_one, code_two, state = None) -> float:
     apc = AntiPlagiatCalc()
-
-    hashed_check = apc.calc_hash(code_one, code_two)  # проверка на дурака
+    hashed_check = apc.calc_hash(code_one, code_two)
 
     if hashed_check:
         return 100.0
 
-    jaccard_check = apc.calc_jaccard(code_one, code_two)
-    levenshtein_check = apc.calc_levenshtein(code_one, code_two)
-
-    if (jaccard_check + levenshtein_check) / 2 > 80:
-        return (jaccard_check + levenshtein_check) / 2
-
-    ast_metric = apc.calc_ast(code_one, code_two)
-
-    return (jaccard_check + levenshtein_check + ast_metric) / 3
+    if state == 'jaccard':
+        jaccard_check = apc.calc_jaccard(code_one, code_two)
+        return jaccard_check
+    elif state == 'levenshtein':
+        levenshtein_check = apc.calc_levenshtein(code_one, code_two)
+        return levenshtein_check
+    elif state == 'ast':
+        ast_metric = apc.calc_ast(code_one, code_two)
+        return ast_metric
+    else:
+        jaccard_check = apc.calc_jaccard(code_one, code_two)
+        levenshtein_check = apc.calc_levenshtein(code_one, code_two)
+        ast_metric = apc.calc_ast(code_one, code_two)
+        similarity = 3 * jaccard_check * levenshtein_check * ast_metric / (
+                    jaccard_check + levenshtein_check + ast_metric)
+        return similarity
