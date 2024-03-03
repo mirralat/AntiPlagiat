@@ -1,0 +1,2 @@
+rapidfuzz==3.6.1
+munkres==1.1.4
