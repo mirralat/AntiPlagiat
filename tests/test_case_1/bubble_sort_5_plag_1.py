@@ -1,0 +1,24 @@
+
+class ToFoolAntiplagiat:
+    who: bool
+    def __init__(self):
+        self.aboba = "aboba"
+
+def bebra_sort(our_list):
+    has_swapped = True
+
+    num_of_iterations = 0
+
+    while(has_swapped):
+        has_swapped = False
+        for i in range(len(our_list) - num_of_iterations - 1):
+            if our_list[i] > our_list[i+1]:
+                # Swap
+                our_list[i], our_list[i+1] = our_list[i+1], our_list[i]
+                has_swapped = True
+        num_of_iterations += 1
+
+
+our_list = [19, 13, 6, 2, 18, 8]
+bebra_sort(our_list)
+print(our_list)
