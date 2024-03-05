@@ -17,7 +17,7 @@ class ASTUtils:
         ):
             return 1
 
-        if (type(ast_a) != type(ast_b)) or (len(children_a) != len(children_b)):
+        if (type(ast_a) != type(ast_b)):
             return 0
 
         if reorder_depth == 0:
@@ -139,6 +139,9 @@ class ASTUtils:
                 or isinstance(root, For)
                 or isinstance(root, comprehension)
                 or isinstance(root, Return)
+                or isinstance(root, Call)
+                or isinstance(root, Expr)
+                or isinstance(root, Assign)
         )
 
     def get_num_nodes(self, root: AST) -> int:
