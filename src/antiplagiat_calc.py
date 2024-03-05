@@ -51,9 +51,4 @@ def check_plagiat(code_one, code_two, state = None) -> float:
         ast_metric = apc.calc_ast(code_one, code_two)
         return ast_metric
     else:
-        jaccard_check = apc.calc_jaccard(code_one, code_two)
-        levenshtein_check = apc.calc_levenshtein(code_one, code_two)
-        ast_metric = apc.calc_ast(code_one, code_two)
-        similarity = 3 * jaccard_check * levenshtein_check * ast_metric / (
-                    jaccard_check + levenshtein_check + ast_metric)
-        return similarity
+        raise ValueError("Wrong method! Use either jaccard, levenshtein or ast")
